@@ -37,7 +37,7 @@ class Tower:
         gt_subdir_min = ((self.gts - 1) // 50) * 50 + 1
         gt_subdir_max = gt_subdir_min + 49
         gt_text = f'{self.gts:0{len(str(gt_subdir_max))}} {gt_desc_text}'
-        gt_subdir_text = f'{gt_subdir_min}-{gt_subdir_max} Golden Tickets'
+        gt_subdir_text = f'{gt_subdir_min:03}-{gt_subdir_max} Golden Tickets'
 
         floor_text = f'{self.goal:03} Floors'
         filepath = f'output/{shared_living_text}/{floor_text}/{gt_subdir_text}/{gt_text}.txt'
