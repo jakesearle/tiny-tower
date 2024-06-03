@@ -58,6 +58,11 @@ class Tower:
                 if remaining_gt >= level:
                     floor_levels[i] += 1
                     remaining_gt -= level
+        # Only upgrade soda brewery to the lowest common floor
+        if floor_levels[0] != floor_levels[-1] and floor_levels[0] > 1:
+            first_upgradable_floor_index = floor_levels.index(floor_levels[-1])
+            # Swap values
+            floor_levels[0], floor_levels[first_upgradable_floor_index] = floor_levels[first_upgradable_floor_index], floor_levels[0]
         self.gt_floor_levels = [0, 0] + floor_levels
 
     def calc_floor_types(self):
