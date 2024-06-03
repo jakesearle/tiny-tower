@@ -51,6 +51,8 @@ class Tower:
             outfile.writelines(lines)
 
     def calc_gt_floor_levels(self):
+        if self.gt_floor_levels is not None:
+            return
         remaining_gt = self.gts
         floor_levels = [0] * self.floors_to_build
         for level in range(1, 3 + 1):
@@ -66,6 +68,8 @@ class Tower:
         self.gt_floor_levels = [0, 0] + floor_levels
 
     def calc_floor_types(self):
+        if self.floor_types is not None:
+            return
         self.floor_types = []
         for i, gt_lvl in enumerate(self.gt_floor_levels):
             if i < 4:
@@ -107,10 +111,15 @@ class Tower:
 
 
 def generate_all():
-    for gts in range(1, 100+1):
-        for goals in range(50, 300+1, 50):
-            for extra_person in [True, False]:
+    for extra_person in [True, False]:
+        cache = set()
+        for gts in range(1, 150+1):
+            for goals in range(50, 300+1, 50):
                 t = Tower(gts=gts, goal=goals, has_shared_living=extra_person)
+                t.calc_gt_floor_levels()
+                if tuple(t.gt_floor_levels) in cache:
+                    continue
+                cache.add(tuple(t.gt_floor_levels))
                 t.print_all_floors()
 
 
