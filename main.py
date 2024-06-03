@@ -33,13 +33,14 @@ class Tower:
         self.calc_gt_floor_levels()
         self.calc_floor_types()
         shared_living_text = "Shared Living Upgrade" if self.has_shared_living else "No Shared Living Upgrade"
-        gt_text = 'Golden Tickets' if self.gts != 1 else 'Golden Ticket'
+        gt_desc_text = 'Golden Tickets' if self.gts != 1 else 'Golden Ticket'
         gt_subdir_min = ((self.gts - 1) // 50) * 50 + 1
         gt_subdir_max = gt_subdir_min+49
+        gt_text = f'{self.gts:0{len(str(gt_subdir_max))}} {gt_desc_text}'
         gt_subdir_text = f'{gt_subdir_min}-{gt_subdir_max} Golden Tickets'
 
-        filename = f'{self.goal:03} Floors.txt'
-        filepath = f'output/{shared_living_text}/{gt_subdir_text}/{self.gts:0{len(str(gt_subdir_max))}} {gt_text}/{filename}'
+        floor_text = f'{self.goal:03} Floors'
+        filepath = f'output/{shared_living_text}/{floor_text}/{gt_subdir_text}/{gt_text}.txt'
 
         max_floor = len(str(self.goal))
         max_type = max([len(t) for t in self.floor_types])
