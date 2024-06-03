@@ -38,7 +38,7 @@ class Tower:
         gt_subdir_max = gt_subdir_min+49
         gt_subdir_text = f'{gt_subdir_min}-{gt_subdir_max} Golden Tickets'
 
-        filename = f'{self.goal} Floors.txt'
+        filename = f'{self.goal:03} Floors.txt'
         filepath = f'output/{shared_living_text}/{gt_subdir_text}/{self.gts:0{len(str(gt_subdir_max))}} {gt_text}/{filename}'
 
         max_floor = len(str(self.goal))
