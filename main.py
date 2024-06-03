@@ -35,7 +35,7 @@ class Tower:
         shared_living_text = "Shared Living Upgrade" if self.has_shared_living else "No Shared Living Upgrade"
         gt_desc_text = 'Golden Tickets' if self.gts != 1 else 'Golden Ticket'
         gt_subdir_min = ((self.gts - 1) // 50) * 50 + 1
-        gt_subdir_max = gt_subdir_min+49
+        gt_subdir_max = gt_subdir_min + 49
         gt_text = f'{self.gts:0{len(str(gt_subdir_max))}} {gt_desc_text}'
         gt_subdir_text = f'{gt_subdir_min}-{gt_subdir_max} Golden Tickets'
 
@@ -55,18 +55,21 @@ class Tower:
         if self.gt_floor_levels is not None:
             return
         remaining_gt = self.gts
-        floor_levels = [0] * self.floors_to_build
+        remaining_gt -= 1  # Set aside for soda
+        floor_levels = [0] * (self.floors_to_build - 1)  # Remove one for the soda
         for level in range(1, 3 + 1):
             for i, f in enumerate(floor_levels):
                 if remaining_gt >= level:
                     floor_levels[i] += 1
                     remaining_gt -= level
         # Only upgrade soda brewery to the lowest common floor
-        if floor_levels[0] != floor_levels[-1] and floor_levels[0] > 1:
-            first_upgradable_floor_index = floor_levels.index(floor_levels[-1])
-            # Swap values
-            floor_levels[0], floor_levels[first_upgradable_floor_index] = floor_levels[first_upgradable_floor_index], floor_levels[0]
-        self.gt_floor_levels = [0, 0] + floor_levels
+        remaining_gt += 1
+        brewery_level = 0
+        for level in range(1, 3 + 1):
+            if remaining_gt >= level:
+                brewery_level += 1
+                remaining_gt -= level
+        self.gt_floor_levels = [0, 0, brewery_level] + floor_levels
 
     def calc_floor_types(self):
         if self.floor_types is not None:
@@ -114,11 +117,12 @@ class Tower:
 def generate_all():
     for extra_person in [True, False]:
         cache = set()
-        for gts in range(1, 150+1):
-            for goals in range(50, 300+1, 50):
+        for gts in range(1, 150 + 1):
+            for goals in range(50, 300 + 1, 50):
                 t = Tower(gts=gts, goal=goals, has_shared_living=extra_person)
                 t.calc_gt_floor_levels()
-                if tuple(t.gt_floor_levels) in cache:
+                #                                        Include the lowest level in each folder
+                if tuple(t.gt_floor_levels) in cache and (gts - 1) % 50 != 0:
                     continue
                 cache.add(tuple(t.gt_floor_levels))
                 t.print_all_floors()
