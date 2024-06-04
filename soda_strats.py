@@ -1,3 +1,5 @@
+import itertools
+import os.path
 import random
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -9,8 +11,6 @@ stocks = [14_184, 28_358, 42_552]
 vip_minutes = [15, 3, 12, 4, 4, 1, 1, 1, 20]
 vip_types = ["construction_worker", "real_estate", "delivery", "big_spender", "billionaire", "celeb", "influencer",
              "leprechaun"]
-
-# TODO: Add sns.pairplot option for all params
 
 
 class StockedTower:
@@ -155,8 +155,7 @@ class UnstockedTower(StockedTower):
             for price, stock in zip(self.sell_price, self.max_stocks):
                 self.total_earnings += price * stock
         elif vip == 'big_spender':
-            ind = random.choice([0, 1, 2])
-            self.total_earnings += self.sell_price[ind] * self.max_stocks[ind]
+            self.total_earnings += self.sell_price[2] * self.max_stocks[2]
 
 
 def plot_n_stocked(n):
@@ -330,11 +329,72 @@ def plot_time_over_the_day(n):
     plt.show()
 
 
-def main():
-    # Default case
-    # s = StockedTower(n_dreamers=3, n_login=3, avg_time=15 * 60)
+def get_all_data(n):
+    filename = f'soda-data-{n}tests.csv'
+    if not os.path.isfile(filename):
+        calc_all_data(n, filename)
+    return pd.read_csv(filename)
 
-    plot_n_stocked_vs_unstocked(256)
+
+def calc_all_data(n, filename):
+    # n_dreamers=0, n_login=1, avg_time=0, gt_level=1
+    parameter_values = [
+        list(range(n)),  # trial no
+        list(range(3 + 1)),  # n_dreamers
+        list(range(1, 10 + 1)),  # n_logins
+        list(range(1 * 60, (60 * 60) + 1, 5 * 60)),  # avg_time (s)
+        list(range(1, 3 + 1)),  # gt_level
+    ]
+    tests = list(itertools.product(*parameter_values))
+    dream_vals, login_vals, time_vals, gt_vals, earnings_vals, strats = [], [], [], [], [], []
+    for (_, n_dreamers, n_logins, avg_time, gt_level) in tqdm(tests):
+        s = StockedTower(n_dreamers=n_dreamers, n_login=n_logins, avg_time=avg_time, gt_level=gt_level)
+        s.do_sim()
+        dream_vals.append(n_dreamers)
+        login_vals.append(n_logins)
+        time_vals.append(avg_time)
+        gt_vals.append(gt_level)
+        earnings_vals.append(s.total_earnings)
+        strats.append('stocked')
+
+        s = UnstockedTower(n_dreamers=n_dreamers, n_login=n_logins, avg_time=avg_time, gt_level=gt_level)
+        s.do_sim()
+        dream_vals.append(n_dreamers)
+        login_vals.append(n_logins)
+        time_vals.append(avg_time)
+        gt_vals.append(gt_level)
+        earnings_vals.append(s.total_earnings)
+        strats.append('unstocked')
+    total_time = [t * v for t, v in zip(time_vals, login_vals)]
+    df = pd.DataFrame({'dream_vals': dream_vals,
+                       'login_vals': login_vals,
+                       'time_vals': time_vals,
+                       'gt_vals': gt_vals,
+                       'earnings_vals': earnings_vals,
+                       'total_time': total_time,
+                       'strats': strats})
+    df.to_csv(filename, index=False)
+
+
+def pairplot(n):
+    df = get_all_data(n)
+
+    # sns.violinplot(data=df, y='earnings_vals', x='dream_vals', hue='strats', split=True, inner='quart')
+    # plt.show()
+    #
+    # sns.violinplot(data=df, y='earnings_vals', x='login_vals', hue='strats', split=True, inner='quart')
+    # plt.show()
+
+    sns.lineplot(data=df, y='earnings_vals', x='time_vals', hue='strats')
+    plt.show()
+
+    sns.lineplot(data=df, y='earnings_vals', x='total_time', hue='strats')
+    plt.show()
+
+
+def main():
+    # plot_n_stocked_vs_unstocked(256)
+    pairplot(5)
 
 
 if __name__ == '__main__':
