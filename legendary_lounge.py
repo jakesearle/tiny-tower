@@ -296,38 +296,24 @@ def composite_graph():
             if u.is_finished():
                 return u.day_log
 
-    n = 1_000
+    n = 100
     logs = [sim() for _ in tqdm(range(n))]
-    # Fill blanks
-    for i in range(MAX_DAYS):
-        if all([i >= len(log) for log in logs]):
-            break
-        for log in logs:
-            if i >= len(log):
-                log.append((i, MAX_LB*TOTAL_LBS))
-    data = np.array(logs)
+    xs = [x for log in logs for (x, _) in log]
+    ys = [y for log in logs for (_, y) in log]
+    # Just every tenth day
+    sample = 10
+    xs = [x for i, x in enumerate(xs) if i % sample == 0]
+    ys = [y for i, y in enumerate(ys) if i % sample == 0]
 
-    x_values = np.array([point[0] for point in data[0]])  # Assuming all trials have the same x-values
-    y_values = np.array([[point[1] for point in trial] for trial in data])
-
-    # Calculate mean and standard deviation for y values
-    y_mean = y_values.mean(axis=0)
-    y_std = y_values.std(axis=0)
-
-    # Create a shaded line plot using seaborn
-    plt.figure(figsize=(10, 6))
-    sns.lineplot(x=x_values, y=y_mean)
-
-    # Add the shaded area for error margin
-    plt.fill_between(x_values, y_mean - y_std, y_mean + y_std, alpha=0.3)
-    plt.xlabel('X Value')
-    plt.ylabel('Y Value')
-    plt.title('Shaded Line Plot with Calculated Error')
+    sns.lineplot(x=xs, y=ys, errorbar="se", sort=True)
+    plt.title(f'Legendary Bitizens Over Time (n={n})')
+    plt.xlabel('Days')
+    plt.ylabel('Total Legendary Bitizens Collected')
     plt.show()
 
 
 def main():
-    average_time()
+    composite_graph()
 
 
 if __name__ == '__main__':

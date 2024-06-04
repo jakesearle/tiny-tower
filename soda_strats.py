@@ -10,6 +10,8 @@ vip_minutes = [15, 3, 12, 4, 4, 1, 1, 1, 20]
 vip_types = ["construction_worker", "real_estate", "delivery", "big_spender", "billionaire", "celeb", "influencer",
              "leprechaun"]
 
+# TODO: Add sns.pairplot option for all params
+
 
 class StockedTower:
     def __init__(self, n_dreamers=0, n_login=1, avg_time=0, gt_level=1):
