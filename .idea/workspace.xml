@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bdc9e7d2-dc5c-4dc3-a338-6011fa33e048" name="Changes" comment="" />
+    <list default="true" id="bdc9e7d2-dc5c-4dc3-a338-6011fa33e048" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,7 +41,12 @@
     "last_opened_file_path": "/Users/jakesearle1/PycharmProjects/tt-floors"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.legendary_lounge">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.soda_strats">
     <configuration name="floor_suggestions" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="tt-floors" />
       <option name="ENV_FILES" value="" />
@@ -108,8 +115,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.legendary_lounge" />
         <item itemvalue="Python.soda_strats" />
+        <item itemvalue="Python.legendary_lounge" />
       </list>
     </recent_temporary>
   </component>
