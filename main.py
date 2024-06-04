@@ -117,12 +117,12 @@ class Tower:
 def generate_all():
     for extra_person in [True, False]:
         cache = set()
-        for gts in range(1, 150 + 1):
+        for gts in range(1, 1800 + 1):
             for goals in range(50, 300 + 1, 50):
                 t = Tower(gts=gts, goal=goals, has_shared_living=extra_person)
                 t.calc_gt_floor_levels()
-                #                                        Include the lowest level in each folder
-                if tuple(t.gt_floor_levels) in cache and (gts - 1) % 50 != 0:
+                # Include the lowest level in each folder
+                if gts >= goals * 6 or (tuple(t.gt_floor_levels) in cache and (gts - 1) % 50 != 0):
                     continue
                 cache.add(tuple(t.gt_floor_levels))
                 t.print_all_floors()
