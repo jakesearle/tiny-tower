@@ -1,8 +1,6 @@
 import os
 
-import colorama
 from tqdm import tqdm
-from colorama import Fore, Style
 
 all_floors = 159
 
@@ -20,12 +18,6 @@ class Tower:
         self.n_jobs = 0
         self.gt_floor_levels = None
         self.floor_types = None
-        # self.floor_colors = [
-        #     f"{Fore.RED}Red{Style.RESET_ALL}",
-        #     f"{Fore.MAGENTA}Purple{Style.RESET_ALL}",
-        #     f"{Fore.LIGHTYELLOW_EX}Yellow{Style.RESET_ALL}",
-        #     f"{Fore.BLUE}Blue{Style.RESET_ALL}",
-        #     f"{Fore.GREEN}Green{Style.RESET_ALL}", ]
 
         self.floor_colors = [f"Red", f"Purple", f"Yellow", f"Blue", f"Green"]
 
